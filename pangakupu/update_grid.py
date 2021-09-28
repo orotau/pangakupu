@@ -1,5 +1,18 @@
 import numpy as np
 
+def get_rotated_cell(grid_shape, row, column, rotation):
+
+    # the purpose of this function is to take as input the 'row' and 'column'
+    # of the cell that is to be updated in the current grid 
+    # and return the row and column of the rotated cell as a tuple
+    grid_to_rotate = np.ones(grid_shape)
+    grid_to_rotate[row, column] = 0 # we want to keep this one new value
+    rotated_array = np.rot90(grid_to_rotate, rotation / 90)
+    rotated_cell = np.where(rotated_array==0)
+    row_rotated_cell = rotated_cell[0]
+    column_rotated_cell = rotated_cell[1]
+    return row_rotated_cell, column_rotated_cell
+
 
 def update_grid(grids, row, column, rotation):
 
@@ -7,40 +20,38 @@ def update_grid(grids, row, column, rotation):
     # and update the cell indicated by row, column
     # then update the other cells to match indicated by rotation (0, 90, 180)
     # then return the new grid
+    
     if rotation not in [0, 90, 180]:
         return False
-        
-    current_grid = grids[-1]
-    current_cell_value = current_grid[row, column] 
-    new_cell_value = not current_cell_value
     
-    new_grid = current_grid
-    new_grid[row, column] = new_cell_value
+    cells_to_update = []
+    current_grid = grids[-1]
+    
+    # the cell we have pressed space bar on always gets updated (toggles)    
+    rc_0 = row, column
+    cells_to_update.append(rc_0)
     
     if rotation == 0:
         pass
-    else :
-        # we will need at least the 180 rotation
-        # create a masked grid, with only the (row, column) as valid
-        mask = np.ones(current_grid.shape)
-        mask[row, column] = 0 # we want to keep this one new value
-        masked_array = np.ma.masked_array(new_grid, mask)
-        masked_array_180 = np.rot90(masked_array, 2)
-        rc_180 = np.where((masked_array_180==True) | (masked_array_180== False))
-        r_180 = rc_180[0]
-        c_180 = rc_180[1]
-        new_grid[r_180, c_180] = new_cell_value
-        if rotation == 90:
-            masked_array_90 = np.rot90(masked_array, 1)
-            rc_90 = np.where((masked_array_90==True) | (masked_array_90== False))
-            r_90 = rc_90[0]
-            c_90 = rc_90[1]
-            new_grid[r_90, c_90] = new_cell_value
-            
-            masked_array_270 = np.rot90(masked_array, 3)
-            rc_270 = np.where((masked_array_270==True) | (masked_array_270== False))
-            r_270 = rc_270[0]
-            c_270 = rc_270[1]
-            new_grid[r_270, c_270] = new_cell_value
-    return new_grid
-     
+    else:
+        # get the 180 degree rotation
+        rc_180 = get_rotated_cell(current_grid.shape, row, column, 180)
+        cells_to_update.append(rc_180)    
+        if rotation == 180:
+            pass
+        elif rotation == 90:
+            rc_90 = get_rotated_cell(current_grid.shape, row, column, 90)
+            cells_to_update.append(rc_90)              
+            rc_270 = get_rotated_cell(current_grid.shape, row, column, 270)
+            cells_to_update.append(rc_270) 
+        else:
+            return False      
+    
+    # create and update the new grid
+    current_cell_value = current_grid[row, column] 
+    new_cell_value = not current_cell_value
+    new_grid = current_grid
+    
+    for rc in cells_to_update:
+        new_grid[rc[0], rc[1]] = new_cell_value
+    return new_grid     
