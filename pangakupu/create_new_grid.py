@@ -14,7 +14,7 @@ def get_rotated_cell(grid_shape, row, column, rotation):
     return row_rotated_cell, column_rotated_cell
 
 
-def update_grid(grids, row, column, rotation):
+def create_new_grid(current_grid, row, column, rotation):
 
     # the purpose of this function is to take the current grid (last entry in grids)
     # and update the cell indicated by row, column
@@ -25,7 +25,6 @@ def update_grid(grids, row, column, rotation):
         return False
     
     cells_to_update = []
-    current_grid = grids[-1]
     
     # the cell we have pressed space bar on always gets updated (toggles)    
     rc_0 = row, column
@@ -47,10 +46,10 @@ def update_grid(grids, row, column, rotation):
         else:
             return False      
     
-    # create and update the new grid
+    # create the new grid
     current_cell_value = current_grid[row, column] 
     new_cell_value = not current_cell_value
-    new_grid = current_grid
+    new_grid = current_grid.copy()
     
     for rc in cells_to_update:
         new_grid[rc[0], rc[1]] = new_cell_value

@@ -1,13 +1,14 @@
 import pygame
 import numpy as np
 from sys import exit
-import update_grid as ug
+import create_new_grid as cng
+import update_map as um
 
 # Turn a numpy array into a grid
 
 # Constants
-CELL_SIZE = 55 # in pixels
-grid_size = 13 #count will be passed in
+CELL_SIZE = 50 # in pixels
+grid_size = 15 #count will be passed in
 
 # pygame stuff
 pygame.init()
@@ -22,8 +23,10 @@ here = pygame.Rect(0, 0, CELL_SIZE, CELL_SIZE)
 # create randomly populated boolean grid to start with
 grids = []
 rng = np.random.default_rng()
-start_grid = rng.choice(a=[True, False], size=(grid_size, grid_size), p=[1, 0])  
+start_grid = rng.choice(a=[True, False], size=(grid_size, grid_size), p=[0, 1])  
 grids.append(start_grid)
+
+undos = [] # grids that have been undone using 'ctrl-x'
 
 
 # create and fill the rekts array
@@ -70,8 +73,17 @@ while True:
             if event.key == pygame.K_SPACE:
                 here_row = int(here.top / CELL_SIZE)
                 here_column = int(here.left / CELL_SIZE)
-                new_grid = ug.update_grid(grids, here_row, here_column, 90)
-                grids.append(new_grid)            
+                new_grid = cng.create_new_grid(grids[-1], here_row, here_column, 90)
+                # add the new grid and adjust 'undos' if necessary
+                um.new_grid(new_grid, grids, undos)
+                
+                
+            if event.mod & pygame.KMOD_CTRL:
+                if event.key == pygame.K_x:
+                    um.undo_map(grids, undos)
+                if event.key == pygame.K_y:
+                    um.redo_map(grids, undos)
+            
             
     keys = pygame.key.get_pressed()
     if sum(keys)==1: # this prevents diagonal movement when 2 keys are pressed
