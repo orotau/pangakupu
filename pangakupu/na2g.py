@@ -3,11 +3,13 @@ import numpy as np
 from sys import exit
 import create_new_grid as cng
 import update_map as um
+import export_grid as eg
+import drawer as dr
 
 # Turn a numpy array into a grid
 
 # Constants
-CELL_SIZE = 50 # in pixels
+CELL_SIZE = 40 # in pixels
 grid_size = 15 #count will be passed in
 
 # pygame stuff
@@ -58,10 +60,7 @@ undos = [] # grids that have been undone using 'ctrl-x'
 
 rekts = np.empty((grid_size, grid_size), dtype=object)
 for index, x in np.ndenumerate(grids[-1]):
-    rekts[index] = pygame.Rect((index[1] * CELL_SIZE, index[0] * CELL_SIZE) ,
-                                                   (CELL_SIZE, CELL_SIZE))
- 
-
+    rekts[index] = pygame.Rect((index[1] * CELL_SIZE, index[0] * CELL_SIZE) , (CELL_SIZE, CELL_SIZE))
 
 while True:
     for event in pygame.event.get():
@@ -75,14 +74,21 @@ while True:
                 here_column = int(here.left / CELL_SIZE)
                 new_grid = cng.create_new_grid(grids[-1], here_row, here_column, 90)
                 # add the new grid and adjust 'undos' if necessary
-                um.new_grid(new_grid, grids, undos)
-                
+                um.new_grid(new_grid, grids, undos)                
                 
             if event.mod & pygame.KMOD_CTRL:
                 if event.key == pygame.K_x:
                     um.undo_map(grids, undos)
+                    
                 if event.key == pygame.K_y:
                     um.redo_map(grids, undos)
+                    
+                if event.key == pygame.K_e:
+                    eg.export_grid(grids[-1], rekts, screen, CELL_SIZE)    
+                    
+                if event.key == pygame.K_f:
+                    new_grid = ~grids[-1] # flip the grid
+                    um.new_grid(new_grid, grids, undos)               
             
             
     keys = pygame.key.get_pressed()
@@ -96,47 +102,20 @@ while True:
         if keys[pygame.K_RIGHT]:
             here.move_ip((CELL_SIZE , 0))       
         here.clamp_ip(screen.get_rect()) #prevent movement off grid 
-    
-
-
 
     # 
-    # ###############
-    # print out the rects #
-    # ###############
+    # #####
+    # draw #
+    # #####
     #
-    for index, x in np.ndenumerate(grids[-1]):
-        if x :
-            kolor = 'WHITE'
-        else :
-            kolor = 'BLACK'
-        pygame.draw.rect(screen, kolor, rekts[index])
+    # grid
+    dr.draw_grid(grids[-1], screen, rekts)
 
-    # print the grid lines (excluding the 4 borders)
-    # horizontal lines
-    for row in rekts[1:]:
-        grid_points = []
+    # grid lines (excluding the 4 borders)
+    dr.draw_grid_lines(screen, rekts, CELL_SIZE)  
         
-        for x in row:
-            grid_points.append((x.left,  x.top))
-        
-        # get into the left of the last column
-        grid_points.append((x.left + CELL_SIZE, x.top))
-        
-        pygame.draw.lines(screen, 'BLACK', False, grid_points)
-
-    # vertical lines    
-    for column in np.transpose(rekts)[1:]:
-        grid_points = []
-        
-        for x in column:
-            grid_points.append((x.left, x.top))
-            
-        # get into top of the last row    
-        grid_points.append((x.left, x.top  + CELL_SIZE))    
-        
-        pygame.draw.lines(screen, 'BLACK', False, grid_points)
-        
-    pygame.draw.rect(screen, 'GREEN', here, 4)     
+    # 'here' square
+    dr.draw_here(screen, 'GREEN', here, 4)   
+      
     pygame.display.update()
-    clock.tick(10) # by trial and error moving the 'here' rectangle around (may change)
+    clock.tick(10) # by trial and error moving the 'here' rectangle around  (may change)
