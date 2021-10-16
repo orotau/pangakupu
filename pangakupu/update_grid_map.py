@@ -12,6 +12,7 @@ b) The necessary data for undo and redo - undos
 c) The new grid (if relevant)
 """
 
+
 def redo_map(grids, undos):
     # if there is nothing in undos, then do nothing - beep
     # otherwise remove the most recent entry in undos and add it to the end of grids
@@ -20,7 +21,7 @@ def redo_map(grids, undos):
     except:
         # nothing in undos
         pygame.mixer.init()
-        sound = pygame.mixer.Sound('nothing left to do.wav')
+        sound = pygame.mixer.Sound("nothing left to do.wav")
         sound.play()
     else:
         grids.append(grid_to_restore)
@@ -32,7 +33,7 @@ def undo_map(grids, undos):
     # otherwise remove the most recent entry in grids and add it to the end of undos
     if len(grids) == 1:
         pygame.mixer.init()
-        sound = pygame.mixer.Sound('nothing left to do.wav')
+        sound = pygame.mixer.Sound("nothing left to do.wav")
         sound.play()
     else:
         grid_to_undo = grids.pop()
@@ -47,5 +48,3 @@ def new_grid(grid, grids, undos):
         # we are not at the end of the trunk, so branching off
         undos.clear()
     return grids, undos
-        
-    
