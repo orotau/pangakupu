@@ -24,7 +24,7 @@ def get_grid_name(grid):
         return hex_name + ".jpeg"
 
 
-def export_grid(grid, rekts, screen, CELL_SIZE):
+def export_grid(grid, rekts, screen, cell_size):
     # the purpose of this function is to
     # get the name of the grid
     # export it as an image
@@ -35,10 +35,10 @@ def export_grid(grid, rekts, screen, CELL_SIZE):
 
     # add numbering
     grid_numbers = ng.get_numbers(grid)
-    dr.draw_grid_numbers(grid_numbers, screen, rekts, CELL_SIZE)
+    dr.draw_grid_numbers(grid_numbers, screen, rekts, cell_size)
 
     # grid lines (excluding the 4 borders)
-    dr.draw_grid_lines(screen, rekts, CELL_SIZE)
+    dr.draw_grid_lines(screen, rekts, cell_size)
     pygame.image.save(screen, grid_name)
 
     return

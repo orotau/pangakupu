@@ -33,10 +33,10 @@ def draw_grid_lines(screen, rekts, cell_size):
         pygame.draw.lines(screen, "BLACK", False, grid_points)
 
 
-def draw_grid_numbers(grid_numbers, screen, rekts, CELL_SIZE):
+def draw_grid_numbers(grid_numbers, screen, rekts, cell_size):
     pygame.freetype.init()
-    my_ft_font: None = pygame.freetype.SysFont("opensymbol", CELL_SIZE / 2.5)
-    offset = int(CELL_SIZE / 3 / 5)
+    my_ft_font: None = pygame.freetype.SysFont("opensymbol", cell_size / 2.5)
+    offset = int(cell_size / 3 / 5)
     for (x, y), number in np.ndenumerate(grid_numbers):
         if number != "":
             my_ft_font.render_to(

@@ -1,0 +1,2 @@
+[graham-desktop-ubuntu]
+sounds_file_path = /home/graham/PythonProjects/pangakupu/sounds
