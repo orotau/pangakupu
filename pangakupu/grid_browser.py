@@ -1,4 +1,3 @@
-import os.path
 import config
 from pathlib import Path
 from collections import deque
@@ -23,9 +22,8 @@ next_button = ttk.Button(frame, command=lambda event: next())
 previous_button = ttk.Button(frame, command=lambda event: previous())
 
 # get the grid image files
-files_and_directories = [os.path.join(grids_path, f) for f in os.listdir(grids_path)]
-all_files = [f for f in files_and_directories if os.path.isfile(f)]
-image_files = [x for x in all_files if x.endswith(".jpeg") or x.endswith(".png")]
+grids_path = Path(grids_path)
+image_files = [x for x in grids_path.iterdir() if x.suffix == ".jpeg" or x.suffix == ".png"]
 
 if image_files:
     image_files = deque(image_files)
