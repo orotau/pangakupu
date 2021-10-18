@@ -1,2 +1,3 @@
 [graham-desktop-ubuntu]
 sounds_file_path = /home/graham/PythonProjects/pangakupu/sounds
+grids_file_path = /home/graham/PythonProjects/pangakupu/grids

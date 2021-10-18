@@ -13,7 +13,7 @@ GRID_SIZE = 700
 
 
 # pygame stuff
-def initial_create_grid(cell_count=15):
+def initial_create_grid(cell_count, symmetry):
     pygame.init()
     cell_size = int(GRID_SIZE / cell_count)
     screen = pygame.display.set_mode((GRID_SIZE, GRID_SIZE))
@@ -74,7 +74,9 @@ def initial_create_grid(cell_count=15):
                 if event.key == pygame.K_SPACE:
                     here_row = int(here.top / cell_size)
                     here_column = int(here.left / cell_size)
-                    new_grid = cng.create_new_grid(grids[-1], here_row, here_column, 90)
+                    new_grid = cng.create_new_grid(
+                        grids[-1], here_row, here_column, symmetry
+                    )
                     # add the new grid and adjust 'undos' if necessary
                     ugm.new_grid(new_grid, grids, undos)
 
@@ -136,6 +138,12 @@ if __name__ == "__main__":
 
     # create the parser for the create_internal_release function
     initial_create_grid_parser = subparsers.add_parser("initial_create_grid")
+    initial_create_grid_parser.add_argument(
+        "cell_count", help="the number of cells across (and also down)", type=int
+    )
+    initial_create_grid_parser.add_argument(
+        "symmetry", help="0-No symmetry, 90 or 180", type=int, choices=[0, 90, 180]
+    )
     initial_create_grid_parser.set_defaults(function=initial_create_grid)
 
     # parse the arguments
