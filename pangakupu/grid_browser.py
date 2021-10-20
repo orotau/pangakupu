@@ -4,6 +4,7 @@ from collections import deque
 import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
+import import_grid as ig
 
 cf = config.ConfigFile()
 grids_path = cf.configfile[cf.computername]["grids_file_path"]
@@ -16,6 +17,7 @@ image_label = ttk.Label(frame)  # the label to contain the image
 root.bind("<Right>", lambda event: next())
 root.bind("<Left>", lambda event: previous())
 root.bind("<Return>", lambda event: select())
+root.bind("<KP_Enter>", lambda event: select())
 
 # create a next and previous button
 next_button = ttk.Button(frame, command=lambda event: next())
@@ -55,6 +57,7 @@ def previous():
 def select():
     # https://stackoverflow.com/a/48593823/4679876
     print(Path(image_files[0]).stem)
+    ig.import_grid(Path(image_files[0]).stem)
 
 
 display_image()
