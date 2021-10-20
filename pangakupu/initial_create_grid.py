@@ -74,7 +74,7 @@ def initial_create_grid(cell_count=15):
                 if event.key == pygame.K_SPACE:
                     here_row = int(here.top / cell_size)
                     here_column = int(here.left / cell_size)
-                    new_grid = cng.create_new_grid(grids[-1], here_row, here_column, 90)
+                    new_grid = cng.create_new_grid(grids[-1], here_row, here_column, 180)
                     # add the new grid and adjust 'undos' if necessary
                     ugm.new_grid(new_grid, grids, undos)
 
@@ -136,6 +136,7 @@ if __name__ == "__main__":
 
     # create the parser for the create_internal_release function
     initial_create_grid_parser = subparsers.add_parser("initial_create_grid")
+    initial_create_grid_parser.add_argument("--cell_count", type=int)
     initial_create_grid_parser.set_defaults(function=initial_create_grid)
 
     # parse the arguments

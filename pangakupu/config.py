@@ -13,7 +13,7 @@ class ConfigFile:
 
     config_paths = {
         "graham-desktop-ubuntu": "/home/graham/PythonProjects/pangakupu/config.txt",
-        "PythonAnywhere": "/home/orotau/conf/config.txt",
+        "graham-lappy": "/home/graham/PythonProjects/pangakupu/config.txt",
     }
 
     def __init__(self):
