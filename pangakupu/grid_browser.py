@@ -23,7 +23,9 @@ previous_button = ttk.Button(frame, command=lambda event: previous())
 
 # get the grid image files
 grids_path = Path(grids_path)
-image_files = [x for x in grids_path.iterdir() if x.suffix == ".jpeg" or x.suffix == ".png"]
+image_files = [
+    x for x in grids_path.iterdir() if x.suffix == ".jpeg" or x.suffix == ".png"
+]
 
 if image_files:
     image_files = deque(image_files)
@@ -49,11 +51,10 @@ def previous():
     image_files.rotate(-1)
     display_image()
 
-    
+
 def select():
     # https://stackoverflow.com/a/48593823/4679876
     print(Path(image_files[0]).stem)
-    
 
 
 display_image()
