@@ -3,11 +3,14 @@ import numpy as np
 from pathlib import Path
 import config
 import bitstring as bs
+
 import drawer as dr
 import number_grid as ng
 
 cf = config.ConfigFile()
 grids_path = cf.configfile[cf.computername]["grids_file_path"]
+SPLITTER1 = "-"
+SPLITTER2 = "x"
 
 
 def get_grid_name(grid):
@@ -17,25 +20,24 @@ def get_grid_name(grid):
     # assumed square at this point - Oct 21 - 2021
     # then the extension
 
-    grid_id = "".join([str(int(x)) for x in grid.flat])
+    grid_id = bs.BitArray(bin="".join([str(int(x)) for x in grid.flat]))
 
-    #
-    if divmod(grid.shape[0]**2, 4)[1] == 0:
-        # cell count is an exact multiple of 4
-        length_of_hex_suffix = 0
+    # do we need a binary suffix or not?
+    if divmod(grid.shape[0] ** 2, 4)[1] == 0:
+        # the cell count is an exact multiple of 4
+        need_binary_suffix = False
     else:
-        # 3 goes to 1, 2 to 2 and 1 to 3
-        length_of_hex_suffix = 4 - divmod(grid.shape[0]**2, 4)[1]
-        
-    hex_suffix = length_of_hex_suffix * "0"  
+        need_binary_suffix = True
 
-    grid_id_for_name = grid_id + hex_suffix    
-    grid_id_for_name = bs.BitArray(bin=grid_id_for_name)
-    
-    hex_stem = grid_id_for_name.hex
-    
-    size_addon = "-" + str(grid.shape[0]) + "x" + str(grid.shape[0])
-    
+    if need_binary_suffix:
+        length_of_binary_suffix = 4 - divmod(grid.shape[0] ** 2, 4)[1]
+        binary_suffix = length_of_binary_suffix * "0"
+        grid_id.append(bs.BitArray(bin=binary_suffix))
+
+    hex_stem = grid_id.hex
+
+    size_addon = SPLITTER1 + str(grid.shape[0]) + SPLITTER2 + str(grid.shape[0])
+
     grid_name = hex_stem + size_addon + ".jpeg"
     return grid_name
 

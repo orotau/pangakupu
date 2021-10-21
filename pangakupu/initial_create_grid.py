@@ -16,10 +16,10 @@ TARGETED_GRID_SIZE = 700
 def initial_create_grid(cell_count, symmetry):
     pygame.init()
     cell_size = int(TARGETED_GRID_SIZE / cell_count)
-    
+
     # to deal with rounding issues
     actual_grid_size = cell_size * cell_count
-    
+
     screen = pygame.display.set_mode((actual_grid_size, actual_grid_size))
     screen.fill("GRAY")
     pygame.display.set_caption("Panga Kupu")
