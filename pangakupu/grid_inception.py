@@ -2,9 +2,9 @@ import pygame
 import numpy as np
 from sys import exit
 import grid_create as gc
-import update_grid_map as ugm
-import export_grid as eg
-import drawer as dr
+import grid_update_map as gum
+import grid_export as ge
+import grid_drawer as gd
 
 # Create a New Grid
 
@@ -19,9 +19,6 @@ def grid_inception(cell_count, symmetry):
 
     # to deal with rounding issues
     actual_grid_size = cell_size * cell_count
-
-    # used to keep the 'here' square in the grid
-    grid_rect = pygame.Rect(0, 0, actual_grid_size, actual_grid_size)
 
     screen = pygame.display.set_mode((actual_grid_size, actual_grid_size))
     screen.fill("GRAY")
@@ -87,21 +84,21 @@ def grid_inception(cell_count, symmetry):
                         grids[-1], here_row, here_column, symmetry
                     )
                     # add the new grid and adjust 'undos' if necessary
-                    ugm.new_grid(new_grid, grids, undos)
+                    gum.new_grid(new_grid, grids, undos)
 
                 if event.mod & pygame.KMOD_CTRL:
                     if event.key == pygame.K_x:
-                        ugm.undo_map(grids, undos)
+                        gum.undo_map(grids, undos)
 
                     if event.key == pygame.K_y:
-                        ugm.redo_map(grids, undos)
+                        gum.redo_map(grids, undos)
 
                     if event.key == pygame.K_e:
-                        eg.export_grid(grids[-1], rekts, screen, cell_size)
+                        ge.export_grid(grids[-1], rekts, screen, cell_size)
 
                     if event.key == pygame.K_f:
                         new_grid = ~grids[-1]  # flip the grid
-                        ugm.new_grid(new_grid, grids, undos)
+                        gum.new_grid(new_grid, grids, undos)
 
         keys = pygame.key.get_pressed()
         if sum(keys) == 1:  # this prevents diagonal movement when 2 keys are pressed
@@ -113,7 +110,7 @@ def grid_inception(cell_count, symmetry):
                 here.move_ip((-cell_size, 0))
             if keys[pygame.K_RIGHT]:
                 here.move_ip((cell_size, 0))
-            here.clamp_ip(grid_rect)  # prevent movement off grid
+            here.clamp_ip(screen.get_rect())  # prevent movement off grid
 
         #
         # ######
@@ -121,13 +118,13 @@ def grid_inception(cell_count, symmetry):
         # ######
         #
         # grid
-        dr.draw_grid(grids[-1], screen, rekts)
+        gd.draw_grid(grids[-1], screen, rekts)
 
         # grid lines (excluding the 4 borders)
-        dr.draw_grid_lines(screen, rekts, cell_size)
+        gd.draw_grid_lines(screen, rekts, cell_size)
 
         # 'here' square
-        dr.draw_here(screen, "GREEN", here, 3)
+        gd.draw_here(screen, "GREEN", here, 3)
 
         pygame.display.update()
         clock.tick(

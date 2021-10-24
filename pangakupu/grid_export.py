@@ -4,8 +4,8 @@ from pathlib import Path
 import config
 import bitstring as bs
 
-import drawer as dr
-import number_grid as ng
+import grid_drawer as gd
+import grid_number as gn
 
 cf = config.ConfigFile()
 grids_path = cf.configfile[cf.computername]["grids_file_path"]
@@ -49,14 +49,14 @@ def export_grid(grid, rekts, screen, cell_size):
     grid_name = get_grid_name(grid)
 
     # grid
-    dr.draw_grid(grid, screen, rekts)
+    gd.draw_grid(grid, screen, rekts)
 
     # add numbering
-    grid_numbers = ng.get_numbers(grid)
-    dr.draw_grid_numbers(grid_numbers, screen, rekts, cell_size)
+    grid_numbers = gn.get_numbers(grid)
+    gd.draw_grid_numbers(grid_numbers, screen, rekts, cell_size)
 
     # grid lines (excluding the 4 borders)
-    dr.draw_grid_lines(screen, rekts, cell_size)
+    gd.draw_grid_lines(screen, rekts, cell_size)
     pygame.image.save(screen, Path(grids_path, grid_name))
 
     return
