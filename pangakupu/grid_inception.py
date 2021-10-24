@@ -1,7 +1,7 @@
 import pygame
 import numpy as np
 from sys import exit
-import create_new_grid as cng
+import grid_create as gc
 import update_grid_map as ugm
 import export_grid as eg
 import drawer as dr
@@ -9,7 +9,7 @@ import drawer as dr
 # Create a New Grid
 
 # Constants
-TARGETED_GRID_SIZE = 600
+TARGETED_GRID_SIZE = 700
 
 
 # pygame stuff
@@ -83,7 +83,7 @@ def grid_inception(cell_count, symmetry):
                 if event.key == pygame.K_SPACE:
                     here_row = int(here.top / cell_size)
                     here_column = int(here.left / cell_size)
-                    new_grid = cng.create_new_grid(
+                    new_grid = gc.grid_create(
                         grids[-1], here_row, here_column, symmetry
                     )
                     # add the new grid and adjust 'undos' if necessary
