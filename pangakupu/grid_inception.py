@@ -9,7 +9,7 @@ import drawer as dr
 # Create a New Grid
 
 # Constants
-TARGETED_GRID_SIZE = 700
+TARGETED_GRID_SIZE = 600
 
 
 # pygame stuff
@@ -23,7 +23,7 @@ def grid_inception(cell_count, symmetry):
     # used to keep the 'here' square in the grid
     grid_rect = pygame.Rect(0, 0, actual_grid_size, actual_grid_size)
 
-    screen = pygame.display.set_mode((actual_grid_size, actual_grid_size + 100))
+    screen = pygame.display.set_mode((actual_grid_size, actual_grid_size))
     screen.fill("GRAY")
     pygame.display.set_caption("Panga Kupu - Grid Creation")
     clock = pygame.time.Clock()
@@ -125,9 +125,6 @@ def grid_inception(cell_count, symmetry):
 
         # grid lines (excluding the 4 borders)
         dr.draw_grid_lines(screen, rekts, cell_size)
-
-        # grid border
-        dr.draw_grid_border(screen, grid_rect)
 
         # 'here' square
         dr.draw_here(screen, "GREEN", here, 3)
