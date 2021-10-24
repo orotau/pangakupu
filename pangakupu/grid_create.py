@@ -13,7 +13,7 @@ TARGETED_GRID_SIZE = 700
 
 
 # pygame stuff
-def initial_create_grid(cell_count, symmetry):
+def grid_create(cell_count, symmetry):
     pygame.init()
     cell_size = int(TARGETED_GRID_SIZE / cell_count)
 
@@ -140,15 +140,15 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()
 
-    # create the parser for the create_internal_release function
-    initial_create_grid_parser = subparsers.add_parser("initial_create_grid")
-    initial_create_grid_parser.add_argument(
+    # create the parser for the grid_create function
+    grid_create_parser = subparsers.add_parser("grid_create")
+    grid_create_parser.add_argument(
         "cell_count", help="the number of cells across (and also down)", type=int
     )
-    initial_create_grid_parser.add_argument(
+    grid_create_parser.add_argument(
         "symmetry", help="0-No symmetry, 90 or 180", type=int, choices=[0, 90, 180]
     )
-    initial_create_grid_parser.set_defaults(function=initial_create_grid)
+    grid_create_parser.set_defaults(function=grid_create)
 
     # parse the arguments
     arguments = parser.parse_args()
