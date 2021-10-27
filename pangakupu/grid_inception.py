@@ -69,7 +69,6 @@ def grid_inception(cell_count, symmetry):
             (index[1] * cell_size, index[0] * cell_size), (cell_size, cell_size)
         )
 
-
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
